@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
 
-const registerUser = function () {
+const registerUser = () => {
   return [
     body("register_email")
       .trim()
@@ -27,6 +27,8 @@ const registerUser = function () {
         //value inputa girilen değerdir
         if (value !== req.body.register_password) {
           throw new Error("Şifreler aynı değil");
+        } else {
+          return true; //eğer hata yoksa true göndersin
         }
       }),
   ];

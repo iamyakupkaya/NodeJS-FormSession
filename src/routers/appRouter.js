@@ -1,6 +1,6 @@
 //Import Libraries
 const router = require("express").Router();
-const { registerUser } = require("../middlewares/userForm");
+const deneme = require("../middlewares/userForm");
 const {
   loginPage,
   registerPage,
@@ -22,7 +22,7 @@ router.get("/login", loginPage);
 router.get("/register", registerPage);
 router.get("/forget-password", forgetPassword);
 //POST
-router.post("/register", registerUser, formRegister);
+router.post("/register", deneme.registerUser(), formRegister);
 router.post("/login", formLogin);
 router.post("/forget-password", formForgetPassword);
 

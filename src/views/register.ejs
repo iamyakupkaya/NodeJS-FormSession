@@ -8,20 +8,23 @@
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                                <% if (locals.validation_errors != undefined) { %>
+                                    <%- include("./partials/_message.ejs") %> 
+                                <% } %>
                             </div>
                             <form class="user" action="/register" method="post">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" name="register_name" class="form-control form-control-user" id="exampleFirstName"
+                                        <input type="text" name="register_name" value="<%- typeof(register_name) != "undefined" ? register_name : "" %>"  class="form-control form-control-user" id="exampleFirstName"
                                             placeholder="First Name">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" name="register_surname" class="form-control form-control-user" id="exampleLastName"
+                                        <input type="text" name="register_surname" value="<%- typeof(register_surname) != "undefined" ? register_surname : "" %>" class="form-control form-control-user" id="exampleLastName"
                                             placeholder="Last Name">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" name="register_email" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="email" name="register_email" value="<%- typeof(register_email) != "undefined" ? register_email : "" %>" class="form-control form-control-user" id="exampleInputEmail"
                                         placeholder="Email Address">
                                 </div>
                                 <div class="form-group row">
@@ -30,7 +33,7 @@
                                             id="exampleInputPassword" placeholder="Password">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" name="register_repassword" class="form-control form-control-user"
+                                        <input type="password" name="register_repassword"  class="form-control form-control-user"
                                             id="exampleRepeatPassword" placeholder="Repeat Password">
                                     </div>
                                 </div>
