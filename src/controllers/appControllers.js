@@ -1,5 +1,8 @@
 const { validationResult } = require("express-validator");
 const User = require("../models/userModel");
+const passport = require("passport");
+
+require("../configs/passportLocal")(passport);
 
 const homePage = (req, res, next) => {
   if (req.session.sayac) {
@@ -87,6 +90,10 @@ const formRegister = async (req, res, next) => {
 
         await newUser.save();
         console.log("Kullanıcı Kayedildi.");
+        req.flash("success_message", [
+          { msg: "Kullanıcı başarı ile kayedildi.. :)" },
+        ]);
+        res.redirect("/login"); // kullanıcı kaydı başarılı ise login sayfasına gidecek
       }
       // burası layout ilk çalışacak ejs sonrasında ise ilk parametre layout içerisinde çağırılacak demektir.
     } catch (error) {
@@ -97,12 +104,17 @@ const formRegister = async (req, res, next) => {
 };
 
 const formLogin = (req, res, next) => {
-  console.log("Gelen Login verileri");
-  console.log(req.body); // formdan gelen verileri almak için
+  /* console.log("Gelen Login verileri");
+  console.log(req.body); // formdan gelen verileri almak için */
   try {
     // burası layout ilk çalışacak ejs sonrasında ise ilk parametre layout içerisinde çağırılacak demektir.
-
-    res.render("login", { layout: "./layout/auth_layout.ejs" });
+    console.log("buradayızz..!");
+    passport.authenticate("local", {
+      successRedirect: "/",
+      failureRedirect: "/login",
+      failureFlash: true,
+    })(req, res, next);
+    //res.render("login", { layout: "./layout/auth_layout.ejs" });
   } catch (error) {
     console.log("We have an error", error);
     res.send({ ERROR: "WARN.! You got an error" + error.message });

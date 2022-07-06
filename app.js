@@ -7,6 +7,7 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const MongoDBStore = require("connect-mongodb-session")(session); //yukarıda oluşturduğumuz session ı yolluyoruz. express session dan oluşturduğumuz session
 const path = require("path");
+const passport = require("passport");
 
 // İmport User-Build
 require("./src/configs/database"); // database connection
@@ -49,10 +50,15 @@ app.use(
 console.log("flash öncesi");
 app.use(flash());
 console.log("flash sonrası");
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use((req, res, next) => {
   console.log("Birinci middle ware");
   //res.locals yaparak req gelen değeri response ekliyoruz daha sonra bunu render ettiğimiz sayfaya otomatik giden response da kullanıyoruz
   res.locals.validation_errors = req.flash("validation_errors");
+  res.locals.success_message = req.flash("success_message");
   res.locals.register_name = req.flash("register_name");
   res.locals.register_surname = req.flash("register_surname");
   res.locals.register_email = req.flash("register_email");
