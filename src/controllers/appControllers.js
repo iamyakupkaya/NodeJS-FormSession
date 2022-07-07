@@ -10,12 +10,14 @@ const homePage = (req, res, next) => {
   } else {
     req.session.sayac = 1;
   }
+  console.log(req.user);
 
   try {
     // burası layout ilk çalışacak ejs sonrasında ise ilk parametre layout içerisinde çağırılacak demektir.
     res.render("home", {
       layout: "./layout/auth_layout.ejs", // layout özel kalasördür
       sayac: req.session.sayac,
+      user: req.user,
     });
   } catch (error) {
     console.log("We have an error", error);
@@ -53,6 +55,26 @@ const forgetPassword = (req, res, next) => {
   } catch (error) {
     console.log("We have an error", error);
     res.send({ ERROR: "WARN.! You got an error" + error.message });
+  }
+};
+
+const logoutPage = (req, res, next) => {
+  try {
+    // burası layout ilk çalışacak ejs sonrasında ise ilk parametre layout içerisinde çağırılacak demektir.
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      req.session.destroy((err) => {
+        next(err);
+      });
+      res.render("login", {
+        layout: "./layout/auth_layout.ejs",
+        success_message: [{ msg: "Oturum başarı ile kapandı." }],
+      });
+    });
+  } catch (error) {
+    res.send({ ERROR: "WARN.! You got an error :( " + error.message });
   }
 };
 
@@ -107,13 +129,23 @@ const formLogin = (req, res, next) => {
   /* console.log("Gelen Login verileri");
   console.log(req.body); // formdan gelen verileri almak için */
   try {
+    const errors = validationResult(req);
+    req.flash("login_email", req.body.login_email);
+
+    if (!errors.isEmpty()) {
+      req.flash("validation_errors", errors.array());
+      console.log("Çalışan yer burası İF");
+      res.redirect("/login");
+    }
     // burası layout ilk çalışacak ejs sonrasında ise ilk parametre layout içerisinde çağırılacak demektir.
-    console.log("buradayızz..!");
-    passport.authenticate("local", {
-      successRedirect: "/",
-      failureRedirect: "/login",
-      failureFlash: true,
-    })(req, res, next);
+    else {
+      passport.authenticate("local", {
+        successRedirect: "/admin",
+        failureRedirect: "/login",
+        failureFlash: true,
+      })(req, res, next);
+    }
+
     //res.render("login", { layout: "./layout/auth_layout.ejs" });
   } catch (error) {
     console.log("We have an error", error);
@@ -140,4 +172,5 @@ module.exports = {
   formRegister,
   formLogin,
   formForgetPassword,
+  logoutPage,
 };

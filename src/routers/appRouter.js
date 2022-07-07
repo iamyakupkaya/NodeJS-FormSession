@@ -9,6 +9,7 @@ const {
   formRegister,
   formLogin,
   formForgetPassword,
+  logoutPage,
 } = require("../controllers/appControllers");
 
 //Starting Project
@@ -21,9 +22,10 @@ router.get("/home", homePage);
 router.get("/login", loginPage);
 router.get("/register", registerPage);
 router.get("/forget-password", forgetPassword);
+router.get("/logout", logoutPage);
 //POST
 router.post("/register", deneme.registerUser(), formRegister);
-router.post("/login", formLogin);
+router.post("/login", deneme.loginUser(), formLogin);
 router.post("/forget-password", formForgetPassword);
 
 module.exports = router;

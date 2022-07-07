@@ -12,14 +12,9 @@ const passport = require("passport");
 // İmport User-Build
 require("./src/configs/database"); // database connection
 const appRouter = require("./src/routers/appRouter");
+const manageRouter = require("./src/routers/manageRouter");
 
 const app = express(); // expressi başlatalım
-
-//session save on database
-const sessionStore = new MongoDBStore({
-  uri: process.env.MONGODB_CONNECTION_STRING,
-  collection: "sessions",
-});
 
 //view engine ejs olarak ayarlayalım
 //SETs
@@ -33,6 +28,12 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 //verileri jsondan alabilmek için
 app.use(express.json());
+
+//session save on database
+const sessionStore = new MongoDBStore({
+  uri: process.env.MONGODB_CONNECTION_STRING,
+  collection: "sessions",
+});
 
 //session ve flash message
 app.use(
@@ -62,6 +63,8 @@ app.use((req, res, next) => {
   res.locals.register_name = req.flash("register_name");
   res.locals.register_surname = req.flash("register_surname");
   res.locals.register_email = req.flash("register_email");
+  res.locals.login_error = req.flash("error");
+  res.locals.login_email = req.flash("login_email");
 
   next();
 });
@@ -78,6 +81,8 @@ app.use("/", appRouter);
 /* app.get("/login", loginPage);
 
 app.get("/register", registerPage); */
+
+app.use("/admin", manageRouter);
 
 //POSTs
 

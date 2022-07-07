@@ -41,6 +41,23 @@ const registerUser = () => {
   ];
 };
 
+const loginUser = () => {
+  return [
+    body("login_email")
+      .trim()
+      .isEmail()
+      .withMessage("Lütfen geçerli e-mail giriniz.."),
+
+    body("login_password")
+      .trim()
+      .isLength({ min: 8 })
+      .withMessage("Minimum 8 karakter...")
+      .isLength({ max: 30 })
+      .withMessage("Maximum 30 karakter..."),
+  ];
+};
+
 module.exports = {
   registerUser,
+  loginUser,
 };

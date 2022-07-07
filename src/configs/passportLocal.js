@@ -15,29 +15,40 @@ module.exports = function (passport) {
       try {
         if (!_findUser) {
           // if there is no user
-          return done(null, false, { message: "User could not find" });
+          return done(null, false, { message: "User could not find :(" });
         }
 
         if (_findUser.password !== login_password) {
-          return done(null, false, { message: "Password is wrong" });
+          return done(null, false, { message: "Password is wrong :(" });
         } else {
           return done(null, _findUser);
         }
       } catch (error) {
-        return done(err);
+        return done(error);
       }
     })
   );
 
   passport.serializeUser(function (user, cb) {
     process.nextTick(function () {
-      cb(null, { id: user.id});
+      cb(null, {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        surname: user.surname,
+      });
     });
   });
 
   passport.deserializeUser(function (user, cb) {
     process.nextTick(function () {
-      return cb(null, user);
+      const newUser = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        surname: user.surname,
+      };
+      return cb(null, newUser);
     });
   });
 };
