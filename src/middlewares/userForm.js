@@ -57,7 +57,40 @@ const loginUser = () => {
   ];
 };
 
+const forgetEmail = () => {
+  return [
+    body("login_email")
+      .trim()
+      .isEmail()
+      .withMessage("Lütfen geçerli e-mail giriniz.."),
+  ];
+};
+
+const newPasswordValidator = () => {
+  return [
+    body("new_password")
+      .trim()
+      .isLength({ min: 8 })
+      .withMessage("Minimum 8 karakter...")
+      .isLength({ max: 30 })
+      .withMessage("Maximum 30 karakter..."),
+
+    body("new_repassword")
+      .trim()
+      .custom((value, { req }) => {
+        //value inputa girilen değerdir
+        if (value !== req.body.new_password) {
+          throw new Error("Şifreler aynı değil");
+        } else {
+          return true; //eğer hata yoksa true göndersin
+        }
+      }),
+  ];
+};
+
 module.exports = {
   registerUser,
   loginUser,
+  forgetEmail,
+  newPasswordValidator
 };

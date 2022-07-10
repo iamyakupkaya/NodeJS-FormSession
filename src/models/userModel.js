@@ -32,6 +32,10 @@ const userSchema = new Schema(
       trim: true,
       required: true,
     },
+    emailActive: {
+      type: Boolean,
+      default: false,
+    },
   },
   { collection: "users", timestamps: true }
 );

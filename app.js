@@ -65,6 +65,8 @@ app.use((req, res, next) => {
   res.locals.register_email = req.flash("register_email");
   res.locals.login_error = req.flash("error");
   res.locals.login_email = req.flash("login_email");
+  res.locals.new_password = req.flash("new_password");
+  res.locals.new_repassword = req.flash("new_repassword");
 
   next();
 });
