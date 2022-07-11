@@ -1,6 +1,9 @@
 //Import Libraries
 const router = require("express").Router();
-const { showAdminPanel } = require("../controllers/manageControllers");
+const {
+  showAdminPanel,
+  showProfilePanel,
+} = require("../controllers/manageControllers");
 const { sessionRight } = require("../middlewares/manageMidware");
 
 //Starting Project
@@ -9,5 +12,6 @@ const { sessionRight } = require("../middlewares/manageMidware");
 
 //GET
 router.get("/", sessionRight, showAdminPanel);
+router.get("/profile", sessionRight, showProfilePanel);
 
 module.exports = router;

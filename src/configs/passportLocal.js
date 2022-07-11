@@ -54,12 +54,13 @@ module.exports = function (passport) {
   passport.deserializeUser(function (user, cb) {
     process.nextTick(function () {
       const newUser = {
+        // bu değerleri req.user diyerek erişebiliyoruz.
         id: user.id,
         email: user.email,
         name: user.name,
         surname: user.surname,
       };
-      return cb(null, newUser);
+      return cb(null, newUser); //normalde user diye gönderirsek tüm user bilgileri gider şifre dahil ama biz yeni bir obje göndrelim
     });
   });
 };
